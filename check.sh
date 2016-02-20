@@ -149,7 +149,7 @@ cablist=$(ls -1 $data/package*cab)
 printf %s "$cablist" | while IFS= read -r cab
 do {
 echo extracting $cab..
-7z x $cab "l\en" -o$data/RevisionId > /dev/null
+7z x $cab "l\en" -o$data/RevisionId
 } done
 else
 echo data direcotry is up to date
