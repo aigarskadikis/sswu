@@ -144,6 +144,13 @@ rm $data/* -rf > /dev/null
 echo re-downloading $filename
 wget $url -O $data/$filename -q
 7z x $data/$filename -y -o$data
+mkdir $data/RevisionId
+cablist=$(ls -1 $data/package*cab)
+printf %s "$cablist" | while IFS= read -r cab
+do {
+echo extracting $cab..
+7z x $cab "l\en" -o$data/RevisionId > /dev/null
+} done
 else
 echo data direcotry is up to date
 fi
