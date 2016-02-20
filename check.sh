@@ -95,6 +95,14 @@ if [ ! -d "$tmp" ]; then
   mkdir -p "$tmp"
 fi
 
+#set data directory in variable based on application name
+data=$(echo ../data/$appname)
+
+#create data directory
+if [ ! -d "$data" ]; then
+  mkdir -p "$data"
+fi
+
 #check if database directory has prepared 
 if [ ! -d "../db" ]; then
   mkdir -p "../db"
@@ -141,7 +149,7 @@ echo $filename not exist. we will create one now..
 fi
 
 echo re-downloading $filename
-wget $url -O $filename -q
+wget $url -O $filename
 
 else
 echo $filename is up to date
@@ -151,11 +159,19 @@ fi
 size=$(du -b $tmp/$filename | sed "s/\s.*$//g")
 if [ $size -gt 102400000 ]; then
 echo file size is $size
+7z x $filename -y -o$tmp
+7z x $tmp/package.cab -y -o$tmp
 
-
-
-
-
+echo
+sed "s/<Update /\n\n<Update /g" "$tmp/package.xml"
+grep "SupersededBy" | \
+sed "s/^.* RevisionId=/RevisionId=/g" | 
+sed "s/RevisionNumber.*RevisionId/RevisionId/g" | \
+sed "s/IsLeaf.*<SupersededBy></SupersededBy /g" | \
+sed "s/ \/><\/SupersededBy>.*$//g" | \
+sed "s/ \/><Revision//g" | \
+sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
+head -10
 
 else
 #downloaded file size is to small
