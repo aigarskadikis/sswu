@@ -139,31 +139,23 @@ lastmodified=$(grep -A99 "^Resolving" $tmp/output.log | grep "Last-Modified" | s
 #check if we have the latest windows update list. if not then download the latest
 grep "$lastmodified" $db
 if [ $? -ne 0 ]; then
-
-if [ -f "$filename" ]; then
-echo found $filename. removing now..
-rm $filename -rf
-
-else
-echo $filename not exist. we will create one now..
-fi
-
+echo new version of $filename found. cleaning data direcotry now..
+rm $data/* -rf > /dev/null
 echo re-downloading $filename
-wget $url -O $filename
-
+wget $url -O $data/$filename -q
+7z x $data/$filename -y -o$data
 else
-echo $filename is up to date
+echo data direcotry is up to date
 fi
 
-#check if downloded file size if it is at least 100Mb
-size=$(du -b $filename | sed "s/\s.*$//g")
-if [ $size -gt 102400000 ]; then
-echo file size is $size
-7z x $filename -y -o$tmp
-7z x $tmp/package.cab -y -o$tmp
+
+#put the last modified timestamp in database
+echo "$lastmodified">> $db
+
+7z x $data/package.cab -y -o$tmp
 
 echo
-sed "s/<Update /\n\n<Update /g" "$tmp/package.xml"
+sed "s/<Update /\n\n<Update /g" "$tmp/package.xml" | \
 grep "SupersededBy" | \
 sed "s/^.* RevisionId=/RevisionId=/g" | 
 sed "s/RevisionNumber.*RevisionId/RevisionId/g" | \
@@ -172,18 +164,6 @@ sed "s/ \/><\/SupersededBy>.*$//g" | \
 sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
 head -10
-
-else
-#downloaded file size is to small
-echo downloaded file size is to small
-emails=$(cat ../maintenance | sed '$aend of file')
-printf %s "$emails" | while IFS= read -r onemail
-do {
-python ../send-email.py "$onemail" "To Do List" "Downloaded file size is to small: 
-$url 
-$size"
-} done
-fi
 
 else
 #if link do not include Last-Modified
