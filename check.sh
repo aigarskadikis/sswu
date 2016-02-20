@@ -81,11 +81,6 @@ echo maintenance email address not configured. this will be used to check if the
 echo echo your.email@gmail.com\> ../maintenance
 echo
 return
-else
-echo e-mail sending configured OK!
-echo make sure you have turned less secure app ON at
-echo https://www.google.com/settings/security/lesssecureapps
-echo
 fi
 
 #set application name based on directory name
@@ -146,7 +141,7 @@ echo $filename not exist. we will create one now..
 fi
 
 echo re-downloading $filename
-wget $url -O $tmp/$filename -q
+wget $url -O $filename -q
 
 else
 echo $filename is up to date
@@ -155,7 +150,7 @@ fi
 #check if downloded file size if it is at least 100Mb
 size=$(du -b $tmp/$filename | sed "s/\s.*$//g")
 if [ $size -gt 102400000 ]; then
-echo file size is biggeer than 100 Mb which is good
+echo file size is $size
 
 
 
@@ -198,3 +193,4 @@ echo
 echo
 fi
 
+rm $tmp -rf > /dev/null
