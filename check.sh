@@ -143,13 +143,14 @@ echo new version of $filename found. cleaning data direcotry now..
 rm $data/* -rf > /dev/null
 echo re-downloading $filename
 wget $url -O $data/$filename -q
-7z x $data/$filename -y -o$data
+echo extracting $filename..
+7z x $data/$filename -y -o$data > /dev/null
 mkdir $data/RevisionId
 cablist=$(ls -1 $data/package*cab)
 printf %s "$cablist" | while IFS= read -r cab
 do {
 echo extracting $cab..
-7z e $cab "l/en" -y -o$data/RevisionId
+7z e $cab "l/en" -y -o$data/RevisionId > /dev/null
 } done
 else
 echo data direcotry is up to date
