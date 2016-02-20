@@ -156,7 +156,7 @@ echo $filename is up to date
 fi
 
 #check if downloded file size if it is at least 100Mb
-size=$(du -b $tmp/$filename | sed "s/\s.*$//g")
+size=$(du -b $filename | sed "s/\s.*$//g")
 if [ $size -gt 102400000 ]; then
 echo file size is $size
 7z x $filename -y -o$tmp
