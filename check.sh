@@ -137,7 +137,7 @@ if [ $? -eq 0 ]; then
 lastmodified=$(grep -A99 "^Resolving" $tmp/output.log | grep "Last-Modified" | sed "s/^.*: //")
 
 #check if we have the latest windows update list. if not then download the latest
-grep "$lastmodified" $db
+grep "$lastmodified" $data/lastmodified.log
 if [ $? -ne 0 ]; then
 echo new version of $filename found. cleaning data direcotry now..
 rm $data/* -rf > /dev/null
@@ -156,6 +156,7 @@ else
 echo data direcotry is up to date
 fi
 
+#if package.xml has not been extracted
 if [ ! -f "$data/package.xml" ]; then
 7z x $data/package.cab -y -o$data
 else package.xml is ready to use
@@ -163,7 +164,7 @@ echo
 fi
 
 #put the last modified timestamp in database
-echo "$lastmodified">> $db
+echo "$lastmodified">> $data/lastmodified.log
 
 
 list=$(sed "s/<Update /\n\n<Update /g" "$tmp/package.xml" | \
