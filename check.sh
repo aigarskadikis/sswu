@@ -156,11 +156,15 @@ else
 echo data direcotry is up to date
 fi
 
+if [ ! -f "$data/package.xml" ]; then
+7z x $data/package.cab -y -o$data
+else package.xml is ready to use
+echo 
+fi
 
 #put the last modified timestamp in database
 echo "$lastmodified">> $db
 
-7z x $data/package.cab -y -o$tmp
 
 list=$(sed "s/<Update /\n\n<Update /g" "$tmp/package.xml" | \
 grep "SupersededBy" | \
@@ -170,7 +174,8 @@ sed "s/IsLeaf.*<SupersededBy></SupersededBy /g" | \
 sed "s/ \/><\/SupersededBy>.*$//g" | \
 sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
-head -20)
+head -20 |\
+sed '$aend')
 
 echo "$list"
 
@@ -180,6 +185,7 @@ rip=$(echo "$line" | sed "s/\s.*$//g")
 supersededby=$(echo "$line" | sed "s/^.*By //" | sed "s/\s/\n/g" | sed '$aend')
 printf %s "$supersededby" | while IFS= read -r replacement
 do {
+
 echo $rip Superseded By $replacement
 
 } done
