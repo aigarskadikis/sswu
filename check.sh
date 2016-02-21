@@ -162,8 +162,7 @@ echo "$lastmodified">> $db
 
 7z x $data/package.cab -y -o$tmp
 
-echo
-sed "s/<Update /\n\n<Update /g" "$tmp/package.xml" | \
+list=$(sed "s/<Update /\n\n<Update /g" "$tmp/package.xml" | \
 grep "SupersededBy" | \
 sed "s/^.* RevisionId=/RevisionId=/g" | 
 sed "s/RevisionNumber.*RevisionId/RevisionId/g" | \
@@ -171,7 +170,19 @@ sed "s/IsLeaf.*<SupersededBy></SupersededBy /g" | \
 sed "s/ \/><\/SupersededBy>.*$//g" | \
 sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
-head -10
+head -10)
+
+printf %s "$list" | while IFS= read -r line
+do {
+rip=$(echo "$line" | sed "s/\s.*$//g")
+supersededby=$(echo "$line" | sed "s/^.*By //" | sed "s/\s/\n/g" | sed "$aend")
+printf %s "$supersededby" | while IFS= read -r replacement
+do {
+echo $rip Superseded By $replacement
+
+} done
+} done
+
 
 else
 #if link do not include Last-Modified
