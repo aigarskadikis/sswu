@@ -187,7 +187,18 @@ supersededby=$(echo "$line" | sed "s/^.*By //" | sed "s/\s/\n/g" | sed '$aend')
 printf %s "$supersededby" | while IFS= read -r replacement
 do {
 
+if [ -f "$data/RevisionId/$rip" ]; then
+if [ -f "$data/RevisionId/$replacement" ]; then
+
 echo $rip Superseded By $replacement
+
+else
+echo replacement $replacement is not defined in RevisionId
+fi
+
+else
+echo rip $rip not defined in RevisionId
+fi
 
 } done
 } done
