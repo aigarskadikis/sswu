@@ -179,7 +179,7 @@ sed "s/IsLeaf.*<SupersededBy></SupersededBy /g" | \
 sed "s/ \/><\/SupersededBy>.*$//g" | \
 sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
-head -20 |\
+head -30 |\
 sed '$aend')
 
 #echo "$list"
@@ -195,12 +195,16 @@ echo $line
 if [ -f "$data/RevisionId/$rip" ]; then
 if [ -f "$data/RevisionId/$replacement" ]; then
 
-#rip information
-cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep "^http" | sed "s/^.*\///g;s/^/KB/;s/$/ has been replaced with:/" 
+#rip KB
+ripkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep "^http" | sed "s/^.*\///g;s/^/KB/")
 
-#replacement description
-#sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/"
-cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/"
+#replacement KB
+replacementkb=$(cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep "^http" | sed "s/^.*\///g;s/^/KB/")
+
+echo $ripkb has already been included in $replacement
+
+#full replacement description
+#cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/"
 
 fi
 
