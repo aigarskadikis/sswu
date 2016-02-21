@@ -170,7 +170,9 @@ sed "s/IsLeaf.*<SupersededBy></SupersededBy /g" | \
 sed "s/ \/><\/SupersededBy>.*$//g" | \
 sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
-head -10)
+head -20)
+
+echo "$list"
 
 printf %s "$list" | while IFS= read -r line
 do {
