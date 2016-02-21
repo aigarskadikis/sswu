@@ -157,6 +157,8 @@ do {
 echo extracting $cab..
 7z e $cab "l/en" -y -o$data/RevisionId > /dev/null
 } done
+#put the last modified timestamp in database
+echo "$lastmodified">> $data/lastmodified.log
 else
 echo data direcotry is up to date
 fi
@@ -168,8 +170,7 @@ else
 echo package.xml is ready to use
 fi
 
-#put the last modified timestamp in database
-echo "$lastmodified">> $data/lastmodified.log
+
 
 list=$(sed "s/<Update /\n\n<Update /g" "$data/package.xml" | \
 grep "SupersededBy" | \
@@ -179,6 +180,8 @@ sed "s/IsLeaf.*<SupersededBy></SupersededBy /g" | \
 sed "s/ \/><\/SupersededBy>.*$//g" | \
 sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
+sed "s/DeploymentAction=.*><Revision/SupersededBy/g" | \
+sed "s/IsBundle=.*><Revision/SupersededBy/g" | \
 head -100 |\
 sed '$aend')
 
@@ -205,7 +208,7 @@ ripkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | g
 #replacement KB
 replacementkb=$(cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep "^http" | sed "s/^.*\///g;s/^/KB/")
 
-echo $ripkb has already been included in $replacementkb >> $data/raw.data
+echo $ripkb has been included in $replacementkb >> $data/raw.data
 
 #full replacement description
 #cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/"
