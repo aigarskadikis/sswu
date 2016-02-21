@@ -182,7 +182,7 @@ sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
 head -20 |\
 sed '$aend')
 
-echo "$list"
+#echo "$list"
 
 printf %s "$list" | while IFS= read -r line
 do {
