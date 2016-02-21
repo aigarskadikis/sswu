@@ -164,8 +164,8 @@ fi
 #if package.xml has not been extracted
 if [ ! -f "$data/package.xml" ]; then
 7z x $data/package.cab -y -o$data
-else package.xml is ready to use
-echo 
+else
+echo package.xml is ready to use
 fi
 
 #put the last modified timestamp in database
