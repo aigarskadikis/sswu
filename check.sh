@@ -213,6 +213,8 @@ echo $ripkb has been included in $replacementkb >> $data/raw.data
 #full replacement description
 #cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/"
 
+#http://catalog.update.microsoft.com/v7/site/Search.aspx?q=$replacementkb
+
 fi
 
 fi
