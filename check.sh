@@ -167,7 +167,7 @@ fi
 echo "$lastmodified">> $data/lastmodified.log
 
 
-list=$(sed "s/<Update /\n\n<Update /g" "$tmp/package.xml" | \
+list=$(sed "s/<Update /\n\n<Update /g" "$data/package.xml" | \
 grep "SupersededBy" | \
 sed "s/^.* RevisionId=/RevisionId=/g" | 
 sed "s/RevisionNumber.*RevisionId/RevisionId/g" | \
@@ -189,6 +189,7 @@ do {
 
 if [ -f "$data/RevisionId/$rip" ]; then
 if [ -f "$data/RevisionId/$replacement" ]; then
+
 
 echo $rip Superseded By $replacement
 
