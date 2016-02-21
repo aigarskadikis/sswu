@@ -177,7 +177,7 @@ echo "$list"
 printf %s "$list" | while IFS= read -r line
 do {
 rip=$(echo "$line" | sed "s/\s.*$//g")
-supersededby=$(echo "$line" | sed "s/^.*By //" | sed "s/\s/\n/g" | sed "$aend")
+supersededby=$(echo "$line" | sed "s/^.*By //" | sed "s/\s/\n/g" | sed '$aend')
 printf %s "$supersededby" | while IFS= read -r replacement
 do {
 echo $rip Superseded By $replacement
