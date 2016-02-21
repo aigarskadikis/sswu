@@ -190,6 +190,7 @@ rip=$(echo "$line" | sed "s/\s.*$//g")
 supersededby=$(echo "$line" | sed "s/^.*By //" | sed "s/\s/\n/g" | sed '$aend')
 printf %s "$supersededby" | while IFS= read -r replacement
 do {
+echo $line
 
 if [ -f "$data/RevisionId/$rip" ]; then
 if [ -f "$data/RevisionId/$replacement" ]; then
@@ -205,6 +206,7 @@ else
 echo rip $rip not defined in RevisionId
 fi
 
+echo
 } done
 } done
 
