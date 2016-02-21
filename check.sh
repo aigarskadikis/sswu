@@ -195,15 +195,15 @@ echo $line
 if [ -f "$data/RevisionId/$rip" ]; then
 if [ -f "$data/RevisionId/$replacement" ]; then
 
+#rip information
+cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep "^http" | sed "s/^.*\///g;s/^/KB/;s/$/ has been replaced with:/" 
 
-echo $rip Superseded By $replacement
+#replacement description
+#sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/"
+cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/"
 
-else
-echo replacement $replacement is not defined in RevisionId
 fi
 
-else
-echo rip $rip not defined in RevisionId
 fi
 
 echo
