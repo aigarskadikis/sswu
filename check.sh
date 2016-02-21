@@ -171,7 +171,6 @@ fi
 #put the last modified timestamp in database
 echo "$lastmodified">> $data/lastmodified.log
 
-
 list=$(sed "s/<Update /\n\n<Update /g" "$data/package.xml" | \
 grep "SupersededBy" | \
 sed "s/^.* RevisionId=/RevisionId=/g" | 
