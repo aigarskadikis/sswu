@@ -133,6 +133,11 @@ if [ $? -eq 0 ]; then
 grep -A99 "^Resolving" $tmp/output.log | grep "Last-Modified" 
 if [ $? -eq 0 ]; then
 
+#in not exist timestamp database then create one
+if [ ! -f "$data/lastmodified.log" ]; then
+  touch "$data/lastmodified.log"
+fi
+
 #take the Last-Modified information
 lastmodified=$(grep -A99 "^Resolving" $tmp/output.log | grep "Last-Modified" | sed "s/^.*: //")
 
