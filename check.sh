@@ -190,7 +190,6 @@ rip=$(echo "$line" | sed "s/\s.*$//g")
 supersededby=$(echo "$line" | sed "s/^.*By //" | sed "s/\s/\n/g" | sed '$aend')
 printf %s "$supersededby" | while IFS= read -r replacement
 do {
-echo $line
 
 if [ -f "$data/RevisionId/$rip" ]; then
 if [ -f "$data/RevisionId/$replacement" ]; then
@@ -201,7 +200,7 @@ ripkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | g
 #replacement KB
 replacementkb=$(cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep "^http" | sed "s/^.*\///g;s/^/KB/")
 
-echo $ripkb has already been included in $replacement
+echo $ripkb has already been included in $replacementkb
 
 #full replacement description
 #cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/"
@@ -210,7 +209,6 @@ fi
 
 fi
 
-echo
 } done
 } done
 
