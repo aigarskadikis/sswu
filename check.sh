@@ -170,7 +170,7 @@ else
 echo package.xml is ready to use
 fi
 
-
+if [ ! -f "$data/SupersededBy.log" ]; then
 
 list=$(sed "s/<Update /\n\n<Update /g" "$data/package.xml" | \
 grep "SupersededBy" | \
@@ -182,10 +182,7 @@ sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
 sed "s/DeploymentAction=.*><Revision/SupersededBy/g" | \
 sed "s/IsBundle=.*><Revision/SupersededBy/g" | \
-head -200 |\
 sed '$aend')
-
-#echo "$list"
 
 if [ ! -f "$data/raw.data" ]; then
   touch "$data/raw.data"
@@ -206,7 +203,6 @@ if [ -f "$data/RevisionId/$replacement" ]; then
 ripkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep -A1 -i "Title:" | grep -v -i "Title:" | sed "s/[()]/\n/g" | grep "^KB[0-9][0-9][0-9][0-9][0-9][0-9].*$")
 #ripkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep "^http" | sed "s/^.*\///g;s/^/KB/")
 
-
 #replacement KB
 replacementkb=$(cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep -A1 -i "Title:" | grep -v -i "Title:" | sed "s/[()]/\n/g" | grep "^KB[0-9][0-9][0-9][0-9][0-9][0-9].*$")
 
@@ -224,7 +220,11 @@ fi
 } done
 } done
 
-sort $data/raw.data | uniq
+sort $data/raw.data | uniq > $data/SupersededBy.log
+
+else 
+echo SupersededBy.log is up to date
+fi
 
 else
 #if link do not include Last-Modified
