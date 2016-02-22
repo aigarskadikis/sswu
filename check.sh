@@ -182,7 +182,7 @@ sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
 sed "s/DeploymentAction=.*><Revision/SupersededBy/g" | \
 sed "s/IsBundle=.*><Revision/SupersededBy/g" | \
-head -500 |\
+head -20 |\
 sed '$aend')
 
 #echo "$list"
@@ -203,12 +203,14 @@ if [ -f "$data/RevisionId/$rip" ]; then
 if [ -f "$data/RevisionId/$replacement" ]; then
 
 #rip KB
-ripkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep "^http" | sed "s/^.*\///g;s/^/KB/")
+ripkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep -A1 -i "Title:" | grep -v -i "Title:" | sed "s/^.* //g;s/[()]//g")
+#ripkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep "^http" | sed "s/^.*\///g;s/^/KB/")
+
 
 #replacement KB
-replacementkb=$(cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep "^http" | sed "s/^.*\///g;s/^/KB/")
+replacementkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep -A1 -i "Title:" | grep -v -i "Title:" | sed "s/^.* //g;s/[()]//g")
 
-echo $ripkb has been included in $replacementkb >> $data/raw.data
+echo $ripkb $replacementkb >> $data/raw.data
 
 #full replacement description
 #cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/"
