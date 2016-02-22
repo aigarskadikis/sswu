@@ -208,7 +208,7 @@ ripkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | g
 
 
 #replacement KB
-replacementkb=$(cat $data/RevisionId/$rip | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep -A1 -i "Title:" | grep -v -i "Title:" | sed "s/[()]/\n/g" | grep "^KB[0-9][0-9][0-9][0-9][0-9][0-9].*$")
+replacementkb=$(cat $data/RevisionId/$replacement | sed "s/>/>\n/g;s/</\n</g" | grep -v "^$" | grep -i -A99 "<Title>" | grep -i -B99 "</MoreInfoUrl>" | sed "/<UninstallNotes>/,/<\/UninstallNotes>/d" | sed "s/^<\/.*$//;s/^<//;s/>$/:/" | grep -A1 -i "Title:" | grep -v -i "Title:" | sed "s/[()]/\n/g" | grep "^KB[0-9][0-9][0-9][0-9][0-9][0-9].*$")
 
 echo $ripkb $replacementkb >> $data/raw.data
 
