@@ -182,7 +182,7 @@ sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
 sed "s/DeploymentAction=.*><Revision/SupersededBy/g" | \
 sed "s/IsBundle=.*><Revision/SupersededBy/g" | \
-head -20 |\
+head -200 |\
 sed '$aend')
 
 #echo "$list"
