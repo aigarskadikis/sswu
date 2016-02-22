@@ -182,11 +182,14 @@ sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
 sed "s/DeploymentAction=.*><Revision/SupersededBy/g" | \
 sed "s/IsBundle=.*><Revision/SupersededBy/g" | \
+head -200 | \
 sed '$aend')
 
 if [ ! -f "$data/raw.data" ]; then
   touch "$data/raw.data"
 fi
+
+#empty the file
 >$data/raw.data
 
 printf %s "$list" | while IFS= read -r line
