@@ -144,6 +144,14 @@ lastmodified=$(grep -A99 "^Resolving" $tmp/output.log | grep "Last-Modified" | s
 #check if we have the latest windows update list. if not then download the latest
 grep "$lastmodified" $data/lastmodified.log
 if [ $? -ne 0 ]; then
+
+#since raspberry pi do the full process like in four hours lets inform the that situation is started:
+emails=$(cat ../maintenance | sed '$aend of file')
+printf %s "$emails" | while IFS= read -r onemail
+do {
+python ../send-email.py "$onemail" "Windows Updates" "Starting to check superseded updates.."
+} done
+
 echo new version of $filename found. cleaning data direcotry now..
 rm $data/* -rf > /dev/null
 echo re-downloading $filename
@@ -182,7 +190,6 @@ sed "s/ \/><Revision//g" | \
 sed "s/RevisionId=\| Revision\|Id=\|\d034//g" | \
 sed "s/DeploymentAction=.*><Revision/SupersededBy/g" | \
 sed "s/IsBundle=.*><Revision/SupersededBy/g" | \
-head -200 | \
 sed '$aend')
 
 if [ ! -f "$data/raw.data" ]; then
@@ -228,6 +235,13 @@ sort $data/raw.data | uniq > $data/SupersededBy.log
 else 
 echo SupersededBy.log is up to date
 fi
+
+#since raspberry pi do the full process like in four hours lets inform the that situation is ended:
+emails=$(cat ../maintenance | sed '$aend of file')
+printf %s "$emails" | while IFS= read -r onemail
+do {
+python ../send-email.py "$onemail" "Windows Updates" "Check completed!"
+} done
 
 else
 #if link do not include Last-Modified
